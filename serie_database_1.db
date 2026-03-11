@@ -1,0 +1,87 @@
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server version:               12.2.2-MariaDB - MariaDB Server
+-- Server OS:                    Win64
+-- HeidiSQL Version:             12.14.0.7165
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+-- Dumping database structure for serie
+CREATE DATABASE IF NOT EXISTS `serie` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci */;
+USE `serie`;
+
+-- Dumping structure for table serie.anbefaling
+CREATE TABLE IF NOT EXISTS `anbefaling` (
+  `anbefaling_id` int(11) NOT NULL AUTO_INCREMENT,
+  `kommentar` text DEFAULT NULL,
+  `er_godtatt` int(10) DEFAULT NULL COMMENT 'null frem til anbefaling godkjennes',
+  `serie_id` int(11) DEFAULT NULL,
+  `mottaker_id` int(11) DEFAULT NULL,
+  `sender_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`anbefaling_id`),
+  KEY `FORIGN KEY` (`serie_id`),
+  KEY `mottaker_id` (`mottaker_id`),
+  KEY `sender_id` (`sender_id`),
+  CONSTRAINT `mottaker_id` FOREIGN KEY (`mottaker_id`) REFERENCES `bruker` (`bruker_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `sender_id` FOREIGN KEY (`sender_id`) REFERENCES `bruker` (`bruker_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `serie_id` FOREIGN KEY (`serie_id`) REFERENCES `serie` (`serie_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci COMMENT='en bruker kan sende anbefalinger på serier til en annen';
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table serie.bruker
+CREATE TABLE IF NOT EXISTS `bruker` (
+  `bruker_id` int(11) NOT NULL AUTO_INCREMENT,
+  `brukernavn` text DEFAULT NULL,
+  `passord` text DEFAULT NULL,
+  `kallenavn` text DEFAULT NULL,
+  `beskrivelse` text DEFAULT NULL,
+  `bilde` blob DEFAULT NULL,
+  PRIMARY KEY (`bruker_id`),
+  UNIQUE KEY `brukernavn` (`brukernavn`) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table serie.serie
+CREATE TABLE IF NOT EXISTS `serie` (
+  `serie_id` int(11) NOT NULL AUTO_INCREMENT,
+  `navn` text DEFAULT NULL,
+  `beskrivelse` text DEFAULT NULL,
+  `utgivelses_aar` text DEFAULT NULL,
+  `stjerner` text DEFAULT NULL,
+  `bilde` blob DEFAULT NULL,
+  PRIMARY KEY (`serie_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table serie.status_serie
+CREATE TABLE IF NOT EXISTS `status_serie` (
+  `status_id` int(11) NOT NULL,
+  `status` int(11) DEFAULT NULL,
+  `bruker_id` int(11) DEFAULT NULL,
+  `serie_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`status_id`),
+  KEY `bruker_id` (`bruker_id`),
+  KEY `serie_id` (`serie_id`),
+  CONSTRAINT `bruker_id` FOREIGN KEY (`bruker_id`) REFERENCES `bruker` (`bruker_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `serie_id` FOREIGN KEY (`serie_id`) REFERENCES `serie` (`serie_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci COMMENT='For at bruker skal kunne registrere om de ser på/ vil se/ eller har sett en serie.\r\nser = bruker ser på\r\nse = bruker vil se\r\nsett = bruker har sett';
+
+-- Data exporting was unselected.
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;

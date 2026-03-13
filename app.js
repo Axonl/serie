@@ -12,6 +12,8 @@ const pool = mysql.createPool({ // trengs grunnet bruk av Maria.db.
   connectionLimit: 5
 });
 
+
+
 app.get('/', (req, res) => {
     res.send('Hello World!');
 }); //Testkode: kan endres

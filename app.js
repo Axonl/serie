@@ -14,7 +14,7 @@ const pool = mysql.createPool({
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
-});
+}); //Testkode: kan endres
 
 // app.get('/chat', async (req, res) => {
 //   try {

@@ -1,7 +1,7 @@
 const express = require('express');
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2/promise');// trengs grunnet bruk av Maria.db. Lastes ned som mysql2
 const app = express();
-const port = 3000;
+const port = 3000; // Hvilken port det åpned i
 
 const pool = mysql.createPool({
   host: '127.0.0.1',

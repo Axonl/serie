@@ -12,8 +12,10 @@ const pool = mysql.createPool({ // trengs grunnet bruk av Maria.db.
   connectionLimit: 5
 });
 
-app.get('/', (req, res) => { //bæsj
-    res.send('Verden er full av ondskap');
+
+
+app.get('/', (req, res) => {
+    res.send('Hello World!');
 }); //Testkode: kan endres
 
 // app.get('/chat', async (req, res) => {

@@ -8,25 +8,24 @@ const pool = mysql.createPool({ // trengs grunnet bruk av Maria.db.
   port: 3306,
   user: 'root',
   password: 'root',
-  database: 'chatdb',
+  database: 'serie',
   connectionLimit: 5
 });
 
-
-
 app.get('/', (req, res) => {
     res.send('Hello World!');
-}); //Testkode: kan endres
+}); 
 
-// app.get('/chat', async (req, res) => {
-//   try {
-//     const [rows] = await pool.query('SELECT * FROM chat');
-//     res.json(rows);
-//   } catch (err) {
-//     console.error('Database error:', err);
-//     res.status(500).json({ error: 'Failed to fetch data from chatdb.chat' });
-//   }
-// });
+app.get('/serie_database_1', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM serie');
+    console.log(rows);
+    res.json(rows);
+  } catch (err) {
+    console.error('Database error:', err);
+    res.status(500).json({ error: 'Failed to fetch data from serie_database_1.serie' });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

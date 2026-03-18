@@ -12,11 +12,53 @@ const pool = mysql.createPool({ // trengs grunnet bruk av Maria.db.
   connectionLimit: 5
 });
 
+pool.exec(`
+CREATE TABLE IF NOT EXISTS bruker (
+    bruker_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    brukernavn TEXT UNIQUE,
+    passord TEXT,
+    kallenavn TEXT,
+    beskrivelse TEXT,
+    bilde BLOB
+);
+
+CREATE TABLE IF NOT EXISTS serie (
+    serie_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    navn TEXT,
+    beskrivelse TEXT,
+    utgivelses_aar TEXT,
+    andmeldelse TEXT,
+    bilde BLOB
+);
+
+CREATE TABLE IF NOT EXISTS anbefaling (
+    anbefaling_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    kommentar TEXT,
+    er_godtatt INTEGER,
+    serie_id INTEGER,
+    mottaker_id INTEGER,
+    sender_id INTEGER,
+    kommentar TEXT,
+    FOREIGN KEY (serie_id) REFERENCES serie(serie_id),
+    FOREIGN KEY (mottaker_id) REFERENCES bruker(bruker_id),
+    FOREIGN KEY (sender_id) REFERENCES bruker(bruker_id)
+);
+
+CREATE TABLE IF NOT EXISTS status_serie (
+    status_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    status TEXT,
+    bruker_id INTEGER,
+    serie_id INTEGER,
+    FOREIGN KEY (serie_id) REFERENCES serie(serie_id),
+    FOREIGN KEY (bruker_id) REFERENCES bruker(bruker_id),
+);
+`);
+
 app.get('/', (req, res) => {
     res.send('Hello World!');
 }); 
 
-app.get('/serie_database_1', async (req, res) => {
+app.get('/data', async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT * FROM serie');
     console.log(rows);
@@ -28,5 +70,5 @@ app.get('/serie_database_1', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`website running at http://localhost:${port}`);
 });
